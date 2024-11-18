@@ -2,7 +2,8 @@
 
 Basic Commands:
 
-'''bash
+'''shell
+#!/bin/bash
 #This will take the text "test" and convert to hex
 echo "test" | xxd -p
 #746573740a
