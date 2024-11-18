@@ -3,7 +3,7 @@
 Basic Commands:<br>
 
 #This will take the text "test" and convert to hex:<br>
-```bash
+```
 echo "test" | xxd -p```
 
 #output:<br>
