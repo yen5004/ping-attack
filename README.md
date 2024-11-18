@@ -1,14 +1,14 @@
 # ping-attack
 
-Basic Commands:
+Basic Commands:<br>
 
-#This will take the text "test" and convert to hex:
+#This will take the text "test" and convert to hex:<br>
 ```echo "test" | xxd -p```
 
-#output:
+#output:<br>
 746573740a
 
-#This will ping the ip address and add the hex of "test" into the data field
+#This will ping the ip address and add the hex of "test" into the data field<br>
 ```ping -c 1 192.168.1.5 -p 746573740a```
 
 
