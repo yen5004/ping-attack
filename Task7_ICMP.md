@@ -2,32 +2,16 @@
 
 In this task, we will be showing how to exfiltrate data using the ICMP protocol. ICMP stands for **I**nternet **C**ontrol **M**essage **P**rotocol, and it is a network layer protocol used to handle error reporting. If you need more information about ICMP and the fundamentals of computer networking, you may visit the following THM room: [What is Networking](https://tryhackme.com/room/whatisnetworking) https://tryhackme.com/room/whatisnetworking. 
 
-Network devices such as routers use  `<span style="color:red;">`ICMP`</span>` ||| <div style="background-color: grey; color: red; padding: 10px;">
-  <span>ICMP</span>
-</div> protocol <div style="background-color: grey; color: red; padding: 10px;">
-  `This is red text inside a grey box.`
-</div> to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the ping command to send ICMP packets through the network, as shown in the following figure.
+Network devices such as routers use `**ICMP**` to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the `**ping**` command to send ICMP packets through the network, as shown in the following figure.
 
 `<span style="color: red;">ICMP</span>`
 
 ![image](https://github.com/user-attachments/assets/a4cbaf82-22f5-42df-aa28-3b03d4666d31)
+###ICMP Request and Reply
 
+The `**HOST1**` sends an ICMP packet with an **echo-request** packet. Then, if `**HOST2**` is available, it sends an `**ICMP**` packet back with an **echo reply** message confirming the availability.
 
-
-This will render the text in a **grey box** with a **red** color due to the `diff` syntax highlighting.
-
-### Conclusion
-If you're working in a full HTML environment (like a browser or web page), the inline CSS approach should work fine. However, in platforms like GitHub or other Markdown-based tools, CSS might not be fully supported, and you may need to adjust your approach depending on the platform you're using.
-
-Let me know what specific environment you're working with, and I can provide a more targeted solution!
-
-
-
-ICMP Request and Reply
-
-The HOST1 sends an ICMP packet with an echo-request packet. Then, if HOST2 is available, it sends an ICMP packet back with an echo reply message confirming the availability.
-
-ICMP Data Section
+##ICMP Data Section
 
 On a high level, the ICMP packet's structure contains a Data section that can include strings or copies of other information, such as the IPv4 header, used for error messages. The following diagram shows the Data section, which is optional to use.
 
