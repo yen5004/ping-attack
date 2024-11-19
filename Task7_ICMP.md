@@ -2,7 +2,7 @@
 
 In this task, we will be showing how to exfiltrate data using the ICMP protocol. ICMP stands for **I**nternet **C**ontrol **M**essage **P**rotocol, and it is a network layer protocol used to handle error reporting. If you need more information about ICMP and the fundamentals of computer networking, you may visit the following THM room: [What is Networking](https://tryhackme.com/room/whatisnetworking) https://tryhackme.com/room/whatisnetworking. 
 
-Network devices such as routers use  <span style="color:red;">`ICMP`</span> ||| <div style="background-color: grey; color: red; padding: 10px;">
+Network devices such as routers use  `<span style="color:red;">`ICMP`</span>` ||| <div style="background-color: grey; color: red; padding: 10px;">
   <span>ICMP</span>
 </div> protocol <div style="background-color: grey; color: red; padding: 10px;">
   `This is red text inside a grey box.`
