@@ -8,6 +8,8 @@ Network devices such as routers use  <span style="color:red;">ICMP</span> ||| <d
   This is red text inside a grey box.
 </div> to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the ping command to send ICMP packets through the network, as shown in the following figure.
 
+<span style="color: red;">ICMP</span>
+
 ![image](https://github.com/user-attachments/assets/a4cbaf82-22f5-42df-aa28-3b03d4666d31)
 
 
