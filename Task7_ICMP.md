@@ -4,10 +4,10 @@ In this task, we will be showing how to exfiltrate data using the ICMP protocol.
 
 Network devices such as routers use **`ICMP`** to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the **`ping`** command to send **`ICMP`** packets through the network, as shown in the figure below:
 
-![image](https://github.com/user-attachments/assets/a4cbaf82-22f5-42df-aa28-3b03d4666d31)<br>
-#### ICMP Request and Reply Diagram<br>
+![image](https://github.com/user-attachments/assets/a4cbaf82-22f5-42df-aa28-3b03d4666d31)
+#### ICMP Request and Reply Diagram  
 
-The **`HOST1`** sends an ICMP packet with an **echo-request** packet. Then, if **`HOST2`** is available, it sends an **`ICMP`** packet back with an **echo reply** message confirming the availability.
+The **`HOST1`** sends an ICMP packet with an **echo-request** packet. Then, if **`HOST2`** is available, it sends an **`ICMP`** packet back with an **echo reply** message confirming the availability.  
 
 ## ICMP Data Section
 
