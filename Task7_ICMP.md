@@ -21,15 +21,15 @@ Note that the Data field is optional and could either be empty or it could conta
 
 To perform manual ICMP data exfiltration, we need to discuss the **`ping`** command a bit more. The **`ping`** command is a network administrator software available in any operating system. It is used to check the reachability and availability by sending **`ICMP`** packets, which can be used as follows:
 <br>
-````bash
+``bash
 #Sending one ICMP packet using the PING Command:
 thm@AttackBox$ ping 10.10.144.103 -c 1
-````
+``
 <br>
-We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **`-c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like.
+We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **`-c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like:
 <br>
 ![image](https://github.com/user-attachments/assets/f858202c-bfcd-4c98-a455-66006c8f6d7d) 
-###### Showing the Data Field value in Wireshark
+###### Showing the Data Field value in Wireshark Diagram
 <br>
 The Wireshark screenshot shows that the Data section has been selected with random strings. It is important to note that this section could be filled with the data that needs to be transferred to another machine. 
 
