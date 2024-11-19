@@ -4,7 +4,9 @@ In this task, we will be showing how to exfiltrate data using the ICMP protocol.
 
 Network devices such as routers use  <span style="color:red;">ICMP</span> ||| <div style="background-color: grey; color: red; padding: 10px;">
   <span>ICMP</span>
-</div> protocol to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the ping command to send ICMP packets through the network, as shown in the following figure.
+</div> protocol <div style="background-color: grey; color: red; padding: 10px;">
+  This is red text inside a grey box.
+</div> to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the ping command to send ICMP packets through the network, as shown in the following figure.
 
 ![image](https://github.com/user-attachments/assets/a4cbaf82-22f5-42df-aa28-3b03d4666d31)
 
