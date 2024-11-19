@@ -27,20 +27,19 @@ To perform manual ICMP data exfiltration, we need to discuss the **`ping`** comm
 <br>
 We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **`-c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like.
 <br>
-![image](https://github.com/user-attachments/assets/f858202c-bfcd-4c98-a455-66006c8f6d7d)
-###### Showing the Data Field value in Wireshark
-<br><br>
+![image](https://github.com/user-attachments/assets/f858202c-bfcd-4c98-a455-66006c8f6d7d) ###### Showing the Data Field value in Wireshark
+<br>
 The Wireshark screenshot shows that the Data section has been selected with random strings. It is important to note that this section could be filled with the data that needs to be transferred to another machine. 
 
 The ping command in the Linux OS has an interesting ICMP option. With the -p argument, we can specify 16 bytes of data in hex representation to send through the packet. ##### **Note that the **`-p`** option is only available for Linux operating systems**. We can confirm that by checking the ping's help manual page.
 <br><br>
-![image](https://github.com/user-attachments/assets/21cd4be2-a81f-4793-b0f9-13489c271214)
-###### Ping's -p argument
+![image](https://github.com/user-attachments/assets/21cd4be2-a81f-4793-b0f9-13489c271214) ###### Ping's -p argument
 
 Let's say that we need to exfiltrate the following credentials **`thm:tryhackme`**. First, we need to convert it to its Hex representation and then pass it to the **`ping`** command using **`-p`** options as follows,
 
 ##### `Using the xxd command to convert text to Hex:`
 ```bash
+# ##### `Using the xxd command to convert text to Hex:`
 root@AttackBox$ echo "thm:tryhackme" | xxd -p 74686d3a7472796861636b6d650a
 ```
 <br><br>
