@@ -5,8 +5,7 @@ In this task, we will be showing how to exfiltrate data using the ICMP protocol.
 Network devices such as routers use **`ICMP`** to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the **`ping`** command to send **`ICMP`** packets through the network, as shown in the figure below:
 
 ![image](https://github.com/user-attachments/assets/a4cbaf82-22f5-42df-aa28-3b03d4666d31)<br>
-<br>
-#### ICMP Request and Reply <br>
+#### ICMP Request and Reply Diagram<br>
 
 The **`HOST1`** sends an ICMP packet with an **echo-request** packet. Then, if **`HOST2`** is available, it sends an **`ICMP`** packet back with an **echo reply** message confirming the availability.
 
@@ -14,8 +13,8 @@ The **`HOST1`** sends an ICMP packet with an **echo-request** packet. Then, if *
 
 On a high level, the **`ICMP`** packet's structure contains a **`Data`** section that can include strings or copies of other information, such as the IPv4 header, used for error messages. The following diagram shows the **`Data`** section, which is optional to use.<br>
 ![image](https://github.com/user-attachments/assets/4f8bf4a9-c0e7-4af1-83c1-50c60fa45e30)<br>
-###### ICMP Packet Structure
-<br>
+###### ICMP Packet Structure Diagram
+
 <br>
 
 Note that the Data field is optional and could either be empty or it could contain a random string during the communications. As an attacker, we can use the ICMP structure to include our data within the **`Data`** section and send it via **`ICMP`** packet to another machine. The other machine must capture the network traffic with the ICMP packets to receive the data.
@@ -27,7 +26,7 @@ To perform manual ICMP data exfiltration, we need to discuss the **`ping`** comm
 thm@AttackBox$ ping 10.10.144.103 -c 1
 ```
 <br>
-We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **`-c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like.
+We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **` -c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like.
 <br>
 ![image](https://github.com/user-attachments/assets/f858202c-bfcd-4c98-a455-66006c8f6d7d) 
 ###### Showing the Data Field value in Wireshark
