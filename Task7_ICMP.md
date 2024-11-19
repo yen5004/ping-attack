@@ -14,6 +14,16 @@ Network devices such as routers use  <span style="color:red;">ICMP</span> ||| <d
 ![image](https://github.com/user-attachments/assets/a4cbaf82-22f5-42df-aa28-3b03d4666d31)
 
 
+
+This will render the text in a **grey box** with a **red** color due to the `diff` syntax highlighting.
+
+### Conclusion
+If you're working in a full HTML environment (like a browser or web page), the inline CSS approach should work fine. However, in platforms like GitHub or other Markdown-based tools, CSS might not be fully supported, and you may need to adjust your approach depending on the platform you're using.
+
+Let me know what specific environment you're working with, and I can provide a more targeted solution!
+
+
+
 ICMP Request and Reply
 
 The HOST1 sends an ICMP packet with an echo-request packet. Then, if HOST2 is available, it sends an ICMP packet back with an echo reply message confirming the availability.
