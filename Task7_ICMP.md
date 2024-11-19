@@ -32,16 +32,18 @@ We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the tar
 <br><br>
 The Wireshark screenshot shows that the Data section has been selected with random strings. It is important to note that this section could be filled with the data that needs to be transferred to another machine. 
 
-The ping command in the Linux OS has an interesting ICMP option. With the -p argument, we can specify 16 bytes of data in hex representation to send through the packet. #####**Note that the **`-p`** option is only available for Linux operating systems**#####. We can confirm that by checking the ping's help manual page.
+The ping command in the Linux OS has an interesting ICMP option. With the -p argument, we can specify 16 bytes of data in hex representation to send through the packet. ##### **Note that the **`-p`** option is only available for Linux operating systems**. We can confirm that by checking the ping's help manual page.
 <br><br>
 ![image](https://github.com/user-attachments/assets/21cd4be2-a81f-4793-b0f9-13489c271214)
 ###### Ping's -p argument
 
 Let's say that we need to exfiltrate the following credentials **`thm:tryhackme`**. First, we need to convert it to its Hex representation and then pass it to the **`ping`** command using **`-p`** options as follows,
 
-##### Using the xxd command to convert text to Hex:
-```root@AttackBox$ echo "thm:tryhackme" | xxd -p 74686d3a7472796861636b6d650a```
-<br>
+##### `Using the xxd command to convert text to Hex:`
+```bash
+root@AttackBox$ echo "thm:tryhackme" | xxd -p 74686d3a7472796861636b6d650a
+```
+<br><br>
 We used the **`xxd`** command to convert our string to Hex, and then we can use the **`ping`** command with the Hex value we got from converting the **`thm:tryhackme`**.
 
 Send Hex using the ping command.
